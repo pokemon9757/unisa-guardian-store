@@ -6,12 +6,12 @@ on:
 jobs:
   zap_scan:
     runs-on: ubuntu-latest
-    name: Scan UniSA store and hope for the best
+    name: Scan Juice Shop preview instance on Heroku
     steps:
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          target: 'http://localhost:3000/'
+          target: 'https://preview.owasp-juice.shop'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a -j'
