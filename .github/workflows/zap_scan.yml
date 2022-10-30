@@ -17,5 +17,5 @@ jobs:
         uses: zaproxy/action-baseline@v0.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          target: 'http://localhost'
+          target: 'http://localhost:3000'
           cmd_options: '-a -j'
