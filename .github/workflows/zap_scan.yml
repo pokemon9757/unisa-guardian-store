@@ -6,16 +6,22 @@ on:
 jobs:
   zap_scan:
     runs-on: ubuntu-latest
-    name: Scan Juice Shop preview instance on Heroku
+    name: Scan UniSA store
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - run: sudo apt-get update && sudo apt-get install -y nginx && sudo systemctl start nginx
+    
+      - name: Install dependencies
+        run: sudo npm i && sudo npm install -g angular-cli && sudo link @angular/cli
+        
+      - name: Run serve and hope for the best 
+        run: npm run serve
       
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          target: 'http://localhost'
+          target: 'http://localhost:3000'
           cmd_options: '-a -j'
