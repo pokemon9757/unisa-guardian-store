@@ -7,10 +7,13 @@ import utils = require('../lib/utils')
 import challengeUtils = require('../lib/challengeUtils')
 import { Request, Response, NextFunction } from 'express'
 import { Review } from 'data/types'
+// Or in CommonJS
 
+const sanitizeHtml = require('sanitize-html');
 const challenges = require('../data/datacache').challenges
 const security = require('../lib/insecurity')
 const db = require('../data/mongodb')
+
 
 // Blocking sleep function as in native MongoDB
 // @ts-expect-error
@@ -27,8 +30,7 @@ global.sleep = (time: number) => {
 
 module.exports = function productReviews () {
   return (req: Request, res: Response, next: NextFunction) => {
-    const id = utils.disableOnContainerEnv() ? Number(req.params.id) : req.params.id
-
+    const id = utils.disableOnContainerEnv() ? Number(sanitizeHtml(req.params.id)) : sanitizeHtml(req.params.id)
     // Measure how long the query takes, to check if there was a nosql dos attack
     const t0 = new Date().getTime()
     db.reviews.find({ $where: 'this.product == ' + id }).then((reviews: Review[]) => {
